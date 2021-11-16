@@ -17,22 +17,62 @@
 #define DYNBITSET_DYNBITSET_H
 
 #include <vector>
-#include <bitset>
 #include <cmath>
+#include <iostream>
+
 
 
 using namespace std;
 
 class dynBitset {
 private:
-    vector<bitset<8>> data;
+    vector<char> data;
     size_t nBits;
 
 public:
     dynBitset(const size_t& size);
-    std::bitset<8>::reference operator[](const size_t& pos);
+
+    class reference;
+
+    dynBitset::reference operator[](size_t pos);
+    bool operator[](size_t pos) const;
 
 };
+
+class dynBitset::reference {
+private:
+    char* buffer;
+    size_t relPos;
+    friend class dynBitset;
+    reference(char* data, const size_t& pos);
+
+public:
+
+    template<class T> reference& operator=(const T& rhs);
+    operator bool() const;
+
+    friend ostream& operator<<(ostream& os, const reference& bit);
+
+};
+
+
+/** helper functions **/
+
+template<class T, class B>
+inline void setBit(T& buffer, const size_t& bit, const B& value) {
+
+    unsigned long newbit = !!value;    // Also booleanize to force 0 or 1
+    buffer ^= (-newbit ^ buffer) & (1UL << bit);
+
+}
+
+template<class T>
+inline constexpr bool getBit(const T& number, const size_t& pos) {
+
+    bool bit = (number >> pos) & 1U;
+    return bit;
+
+}
 
 
 #include "dynBitset.hpp"
