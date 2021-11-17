@@ -72,4 +72,38 @@ dynBitset::reference::operator bool() const {
     return getBit(*buffer,relPos);
 }
 
+#ifdef HAVE_MPI
+
+void dynBitset::send(int dest, int tag, MPI_Comm comm, request* req) {
+
+    /** send data **/
+    MPI_Isend(data.data(), data.size(), MPI_CHAR, dest, tag, comm, req->data);
+
+    /** send # of bits **/
+    MPI_Isend(&nBits, 1, MPI_UNSIGNED_LONG, dest, tag, comm, req->nBits);
+
+}
+
+void dynBitset::receive(int dest, int tag, MPI_Comm comm, request* req) {
+
+    /** send data **/
+    MPI_Irecv(data.data(), data.size(), MPI_CHAR, dest, tag, comm, req->data);
+
+    /** send # of bits **/
+    MPI_Isend(&nBits, 1, MPI_UNSIGNED_LONG, dest, tag, comm, req->nBits);
+
+}
+
+void dynBitset::complete(request* req) {
+
+    /** wait for data **/
+    MPI_Wait(req->data);
+
+    /** wait for # of bits **/
+    MPI_Wait(req->nBits);
+
+}
+
+#endif //HAVE_MPI
+
 #endif //DYNBITSET_DYNBITSET_HPP

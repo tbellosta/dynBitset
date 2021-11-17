@@ -19,6 +19,7 @@
 #include <vector>
 #include <cmath>
 #include <iostream>
+#include <mpi.h>
 
 
 
@@ -27,7 +28,7 @@ using namespace std;
 class dynBitset {
 private:
     vector<char> data;
-    size_t nBits;
+    unsigned long nBits;
 
 public:
     dynBitset(const size_t& size);
@@ -36,6 +37,15 @@ public:
 
     dynBitset::reference operator[](size_t pos);
     bool operator[](size_t pos) const;
+
+#ifdef HAVE_MPI
+    struct request {
+        MPI_Request data, nBits;
+    };
+    void send(int dest, int tag, MPI_Comm comm, request* req);
+    void receive(int dest, int tag, MPI_Comm comm, request* req);
+    void complete(request* req);
+#endif
 
 };
 
@@ -73,6 +83,8 @@ inline constexpr bool getBit(const T& number, const size_t& pos) {
     return bit;
 
 }
+
+
 
 
 #include "dynBitset.hpp"
