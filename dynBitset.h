@@ -37,14 +37,16 @@ public:
 
     dynBitset::reference operator[](size_t pos);
     bool operator[](size_t pos) const;
-
+#define HAVE_MPI
 #ifdef HAVE_MPI
     struct request {
         MPI_Request data, nBits;
     };
-    void send(int dest, int tag, MPI_Comm comm, request* req);
-    void receive(int dest, int tag, MPI_Comm comm, request* req);
-    void complete(request* req);
+    request MPIRequest;
+
+    void send(int dest, int tag, MPI_Comm comm);
+    void receive(int dest, int tag, MPI_Comm comm);
+    void complete();
 #endif
 
 };

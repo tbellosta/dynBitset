@@ -74,33 +74,33 @@ dynBitset::reference::operator bool() const {
 
 #ifdef HAVE_MPI
 
-void dynBitset::send(int dest, int tag, MPI_Comm comm, request* req) {
+void dynBitset::send(int dest, int tag, MPI_Comm comm) {
 
     /** send data **/
-    MPI_Isend(data.data(), data.size(), MPI_CHAR, dest, tag, comm, req->data);
+    MPI_Isend(data.data(), data.size(), MPI_CHAR, dest, tag, comm, MPIRequest.data);
 
     /** send # of bits **/
-    MPI_Isend(&nBits, 1, MPI_UNSIGNED_LONG, dest, tag, comm, req->nBits);
+    MPI_Isend(&nBits, 1, MPI_UNSIGNED_LONG, dest, tag, comm, MPIRequest.nBits);
 
 }
 
-void dynBitset::receive(int dest, int tag, MPI_Comm comm, request* req) {
+void dynBitset::receive(int dest, int tag, MPI_Comm comm) {
 
     /** send data **/
-    MPI_Irecv(data.data(), data.size(), MPI_CHAR, dest, tag, comm, req->data);
+    MPI_Irecv(data.data(), data.size(), MPI_CHAR, dest, tag, comm, MPIRequest.data);
 
     /** send # of bits **/
-    MPI_Isend(&nBits, 1, MPI_UNSIGNED_LONG, dest, tag, comm, req->nBits);
+    MPI_Isend(&nBits, 1, MPI_UNSIGNED_LONG, dest, tag, comm, MPIRequest.nBits);
 
 }
 
-void dynBitset::complete(request* req) {
+void dynBitset::complete() {
 
     /** wait for data **/
-    MPI_Wait(req->data);
+    MPI_Wait(MPIRequest.data);
 
     /** wait for # of bits **/
-    MPI_Wait(req->nBits);
+    MPI_Wait(MPIRequest.nBits);
 
 }
 
