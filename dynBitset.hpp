@@ -77,30 +77,30 @@ dynBitset::reference::operator bool() const {
 void dynBitset::send(int dest, int tag, MPI_Comm comm) {
 
     /** send data **/
-    MPI_Isend(data.data(), data.size(), MPI_CHAR, dest, tag, comm, MPIRequest.data);
+    MPI_Isend(data.data(), data.size(), MPI_CHAR, dest, tag, comm, &MPIRequest.data);
 
     /** send # of bits **/
-    MPI_Isend(&nBits, 1, MPI_UNSIGNED_LONG, dest, tag, comm, MPIRequest.nBits);
+    MPI_Isend(&nBits, 1, MPI_UNSIGNED_LONG, dest, tag, comm, &MPIRequest.nBits);
 
 }
 
 void dynBitset::receive(int dest, int tag, MPI_Comm comm) {
 
     /** send data **/
-    MPI_Irecv(data.data(), data.size(), MPI_CHAR, dest, tag, comm, MPIRequest.data);
+    MPI_Irecv(data.data(), data.size(), MPI_CHAR, dest, tag, comm, &MPIRequest.data);
 
     /** send # of bits **/
-    MPI_Isend(&nBits, 1, MPI_UNSIGNED_LONG, dest, tag, comm, MPIRequest.nBits);
+    MPI_Isend(&nBits, 1, MPI_UNSIGNED_LONG, dest, tag, comm, &MPIRequest.nBits);
 
 }
 
 void dynBitset::complete() {
 
     /** wait for data **/
-    MPI_Wait(MPIRequest.data);
+    MPI_Wait(&MPIRequest.data, NULL);
 
     /** wait for # of bits **/
-    MPI_Wait(MPIRequest.nBits);
+    MPI_Wait(&MPIRequest.nBits, NULL);
 
 }
 
