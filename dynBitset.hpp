@@ -27,6 +27,8 @@ dynBitset::dynBitset(const size_t &size) {
     /** allocate char array **/
     data = vector<char>(nChars,0);
 
+    nBits = size;
+
 }
 
 dynBitset::reference dynBitset::operator[](size_t pos) {
@@ -90,7 +92,7 @@ void dynBitset::receive(int dest, int tag, MPI_Comm comm) {
     MPI_Irecv(data.data(), data.size(), MPI_CHAR, dest, tag, comm, &MPIRequest.data);
 
     /** send # of bits **/
-    MPI_Isend(&nBits, 1, MPI_UNSIGNED_LONG, dest, tag, comm, &MPIRequest.nBits);
+    MPI_Irecv(&nBits, 1, MPI_UNSIGNED_LONG, dest, tag, comm, &MPIRequest.nBits);
 
 }
 
