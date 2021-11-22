@@ -45,7 +45,9 @@ public:
     request MPIRequest;
 
     void send(int dest, int tag, MPI_Comm comm);
+    void isend(int dest, int tag, MPI_Comm comm);
     void receive(int dest, int tag, MPI_Comm comm);
+    void ireceive(int dest, int tag, MPI_Comm comm);
     void complete();
 #endif
 

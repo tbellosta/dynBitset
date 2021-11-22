@@ -79,6 +79,16 @@ dynBitset::reference::operator bool() const {
 void dynBitset::send(int dest, int tag, MPI_Comm comm) {
 
     /** send data **/
+    MPI_Send(data.data(), data.size(), MPI_CHAR, dest, tag, comm);
+
+    /** send # of bits **/
+    MPI_Send(&nBits, 1, MPI_UNSIGNED_LONG, dest, tag, comm);
+
+}
+
+void dynBitset::isend(int dest, int tag, MPI_Comm comm) {
+
+    /** send data **/
     MPI_Isend(data.data(), data.size(), MPI_CHAR, dest, tag, comm, &MPIRequest.data);
 
     /** send # of bits **/
@@ -87,6 +97,16 @@ void dynBitset::send(int dest, int tag, MPI_Comm comm) {
 }
 
 void dynBitset::receive(int dest, int tag, MPI_Comm comm) {
+
+    /** send data **/
+    MPI_Recv(data.data(), data.size(), MPI_CHAR, dest, tag, comm);
+
+    /** send # of bits **/
+    MPI_Recv(&nBits, 1, MPI_UNSIGNED_LONG, dest, tag, comm);
+
+}
+
+void dynBitset::ireceive(int dest, int tag, MPI_Comm comm) {
 
     /** send data **/
     MPI_Irecv(data.data(), data.size(), MPI_CHAR, dest, tag, comm, &MPIRequest.data);
