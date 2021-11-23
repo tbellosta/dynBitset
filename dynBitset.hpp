@@ -99,10 +99,10 @@ void dynBitset::isend(int dest, int tag, MPI_Comm comm) {
 void dynBitset::receive(int dest, int tag, MPI_Comm comm) {
 
     /** send data **/
-    MPI_Recv(data.data(), data.size(), MPI_CHAR, dest, tag, comm);
+    MPI_Recv(data.data(), data.size(), MPI_CHAR, dest, tag, comm, NULL);
 
     /** send # of bits **/
-    MPI_Recv(&nBits, 1, MPI_UNSIGNED_LONG, dest, tag, comm);
+    MPI_Recv(&nBits, 1, MPI_UNSIGNED_LONG, dest, tag, comm, NULL);
 
 }
 
