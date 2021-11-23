@@ -62,7 +62,7 @@ private:
 
 public:
 
-    inline template<class T> reference& operator=(const T& rhs);
+    template<class T> inline reference& operator=(const T& rhs);
     inline operator bool() const;
 
     inline friend ostream& operator<<(ostream& os, const reference& bit);
