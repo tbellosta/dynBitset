@@ -31,12 +31,12 @@ private:
     unsigned long nBits;
 
 public:
-    dynBitset(const size_t& size);
+    inline dynBitset(const size_t& size);
 
     class reference;
 
-    dynBitset::reference operator[](size_t pos);
-    bool operator[](size_t pos) const;
+    inline dynBitset::reference operator[](size_t pos);
+    inline bool operator[](size_t pos) const;
 
 #ifdef HAVE_MPI
     struct request {
@@ -44,11 +44,11 @@ public:
     };
     request MPIRequest;
 
-    void send(int dest, int tag, MPI_Comm comm);
-    void isend(int dest, int tag, MPI_Comm comm);
-    void receive(int dest, int tag, MPI_Comm comm);
-    void ireceive(int dest, int tag, MPI_Comm comm);
-    void complete();
+    inline void send(int dest, int tag, MPI_Comm comm);
+    inline void isend(int dest, int tag, MPI_Comm comm);
+    inline void receive(int dest, int tag, MPI_Comm comm);
+    inline void ireceive(int dest, int tag, MPI_Comm comm);
+    inline void complete();
 #endif
 
 };
@@ -58,14 +58,14 @@ private:
     char* buffer;
     size_t relPos;
     friend class dynBitset;
-    reference(char* data, const size_t& pos);
+    inline reference(char* data, const size_t& pos);
 
 public:
 
-    template<class T> reference& operator=(const T& rhs);
-    operator bool() const;
+    inline template<class T> reference& operator=(const T& rhs);
+    inline operator bool() const;
 
-    friend ostream& operator<<(ostream& os, const reference& bit);
+    inline friend ostream& operator<<(ostream& os, const reference& bit);
 
 };
 
