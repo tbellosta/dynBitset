@@ -37,7 +37,8 @@ public:
 
     inline dynBitset::reference operator[](size_t pos);
     inline bool operator[](size_t pos) const;
-    inline vector<char>& getData() {return data;};
+    inline vector<char>& getData();
+    inline void loadData(const vector<char>& data, const unsigned long& nBts);
 
 #ifdef HAVE_MPI
     struct request {

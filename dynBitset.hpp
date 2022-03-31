@@ -54,6 +54,15 @@ bool dynBitset::operator[](size_t pos) const {
     return getBit(data[iChar], relPos);
 }
 
+vector<char>& dynBitset::getData() {
+    return data;
+}
+
+void dynBitset::loadData(const vector<char>& ldData, const unsigned long& nBts) {
+    data = move(ldData);
+    nBits = nBts;
+}
+
 
 dynBitset::reference::reference(char* data, const size_t& pos) : buffer(data), relPos(pos) {}
 
